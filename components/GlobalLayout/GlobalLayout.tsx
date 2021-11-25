@@ -15,7 +15,7 @@ const GlobalStyle = createGlobalStyle<{ theme: ThemeType }>`
       min-height: 1vw;
     }
     body{
-        background: ${(props) => props.theme.background};
+        background: var(--lightPinkBg);
         width: 100vw;
         overflow-x: hidden;
         transition: background-color var(--transition);
@@ -34,7 +34,7 @@ const GlobalStyle = createGlobalStyle<{ theme: ThemeType }>`
 
     input {
       border: none;
-      background: none;
+      background: transparent;
       box-shadow: none;
       padding: 0;
 

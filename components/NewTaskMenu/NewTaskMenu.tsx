@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useRef, useEffect, RefObject } from "react";
 import { Formik } from "formik";
 import { motion } from "framer-motion";
 import * as Yup from "yup";
@@ -7,6 +8,9 @@ import { contentContainer } from "../../theme/mixins";
 
 interface NewTaskMenuProps {
   className?: string;
+  addTask: (taskName: string, color: string) => void;
+  setNewTaskMenuActive: (val: boolean) => void;
+  headerRef: RefObject<HTMLElement>;
 }
 
 const NewTaskMenuSchema = Yup.object().shape({
@@ -23,13 +27,33 @@ const colors = [
   "#E9B44D",
 ];
 
-const NewTaskMenu = ({ className }: NewTaskMenuProps) => {
+const NewTaskMenu = ({
+  className,
+  addTask,
+  setNewTaskMenuActive,
+  headerRef
+}: NewTaskMenuProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClick = (e: Event) => {
+      if (
+        (ref.current && ref.current.contains(e.target as Node)) ||
+        (headerRef.current && headerRef.current.contains(e.target as Node))
+      ) {
+        return;
+      }
+      setNewTaskMenuActive(false);
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
   return (
     <motion.div
       className={className}
       initial={{ y: -500, opacity: 0, pointerEvents: "none" }}
-      animate={{ y: 0, opacity: 0.95, pointerEvents: "all" }}
+      animate={{ y: 0, opacity: 1, pointerEvents: "all" }}
       exit={{ y: -500, opacity: 0, pointerEvents: "none" }}
+      ref={ref}
       transition={{
         stiffness: 100,
         ease: "easeOut",
@@ -44,6 +68,8 @@ const NewTaskMenu = ({ className }: NewTaskMenuProps) => {
         }}
         validationSchema={NewTaskMenuSchema}
         onSubmit={(values, { setSubmitting, resetForm }) => {
+          addTask(values.taskName, values.color);
+          setNewTaskMenuActive(false);
           setTimeout(() => {
             resetForm();
           }, 400);
@@ -124,6 +150,10 @@ const StyledNewTaskMenu = styled(NewTaskMenu)`
       width: 100%;
       color: black;
       margin: var(--px26) 0;
+
+      &::placeholder {
+        color: black;
+      }
     }
 
     > button {

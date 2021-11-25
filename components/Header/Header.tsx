@@ -1,4 +1,5 @@
 import { Header } from "next/dist/lib/load-custom-routes";
+import { RefObject } from "react";
 import styled from "styled-components";
 import { contentContainer } from "../../theme/mixins";
 
@@ -6,14 +7,16 @@ interface HeaderProps {
   className?: string;
   newTaskMenuActive: boolean;
   setNewTaskMenuActive: (val: boolean) => void;
+  headerRef: RefObject<HTMLElement>;
 }
 
 const Header = ({
   className,
   newTaskMenuActive,
   setNewTaskMenuActive,
+  headerRef
 }: HeaderProps) => (
-  <header className={className}>
+  <header className={className} ref={headerRef}>
     <div>
       <h1>taskey</h1>
       <button onClick={() => setNewTaskMenuActive(!newTaskMenuActive)}>

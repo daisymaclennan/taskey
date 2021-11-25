@@ -44,6 +44,7 @@ const variables = css`
     --transition: 0.25s ease-in;
 
     // Colors
+    --lightPinkBg: #FEFCFF;
     --lightBlueBg: #D7E4F1;
   }
 `;
