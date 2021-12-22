@@ -69,6 +69,10 @@ const Home: NextPage = () => {
       isCompleted: !subtask.isCompleted,
     };
 
+    const unCompletedSubs = copySubs.filter((sub) => sub.isCompleted === false);
+
+    if (unCompletedSubs.length < 1) toggleCompleteTask(task);
+
     let copyArr = [...tasks];
     const myItemIndex = tasks.findIndex((element) => element.id === task.id);
     copyArr[myItemIndex] = {
@@ -76,10 +80,7 @@ const Home: NextPage = () => {
       subtasks: copySubs,
     };
 
-    const unCompletedSubs = copySubs.filter((sub) => sub.isCompleted === false);
-
     setTasks(copyArr);
-    if (unCompletedSubs.length < 1) toggleCompleteTask(task);
   };
 
   console.log(tasks);
@@ -101,34 +102,39 @@ const Home: NextPage = () => {
       </AnimatePresence>
 
       <TaskColumns>
-        <TaskGrid id='unCompletedTasks'>
+        <div>
           <TaskColumnHeader>To do:</TaskColumnHeader>
-          {tasks
-            .filter((t) => t.isCompleted === false)
-            .map((t) => (
-              <Task
-                key={t.id}
-                task={t}
-                addSubtask={addSubtask}
-                toggleCompleteTask={toggleCompleteTask}
-                toggleSubtaskCompletion={toggleSubtaskCompletion}
-              />
-            ))}
-        </TaskGrid>
-        <TaskGrid id='completedTasks'>
+          <TaskGrid id="unCompletedTasks">
+            {tasks
+              .filter((t) => t.isCompleted === false)
+              .map((t) => (
+                <Task
+                  key={t.id}
+                  task={t}
+                  addSubtask={addSubtask}
+                  toggleCompleteTask={toggleCompleteTask}
+                  toggleSubtaskCompletion={toggleSubtaskCompletion}
+                />
+              ))}
+          </TaskGrid>
+        </div>
+
+        <div>
           <TaskColumnHeader>Completed:</TaskColumnHeader>
-          {tasks
-            .filter((t) => t.isCompleted === true)
-            .map((t) => (
-              <Task
-                key={t.id}
-                task={t}
-                addSubtask={addSubtask}
-                toggleCompleteTask={toggleCompleteTask}
-                toggleSubtaskCompletion={toggleSubtaskCompletion}
-              />
-            ))}
-        </TaskGrid>
+          <TaskGrid id="completedTasks">
+            {tasks
+              .filter((t) => t.isCompleted === true)
+              .map((t) => (
+                <Task
+                  key={t.id}
+                  task={t}
+                  addSubtask={addSubtask}
+                  toggleCompleteTask={toggleCompleteTask}
+                  toggleSubtaskCompletion={toggleSubtaskCompletion}
+                />
+              ))}
+          </TaskGrid>
+        </div>
       </TaskColumns>
     </div>
   );

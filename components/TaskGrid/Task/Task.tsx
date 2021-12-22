@@ -24,7 +24,7 @@ const Task = ({
   console.log(task.isCompleted);
   return (
     <div className={className}>
-      <TaskMoveHandle setDisableDrag={() => console.log('blah')} />
+      <TaskMoveHandle setDisableDrag={() => console.log("blah")} />
       <div>
         <h3>{task.taskName}</h3>
         <TaskDoneButton
@@ -33,17 +33,20 @@ const Task = ({
           onClick={() => toggleCompleteTask(task)}
         />
       </div>
-      <TaskSubs>
-        {task.subtasks.map((sub) => (
-          <li key={sub.id}>
-            {sub.name}{" "}
-            <TaskDoneButton
-              isChecked={sub.isCompleted}
-              onClick={() => toggleSubtaskCompletion(task, sub)}
-            />
-          </li>
-        ))}
-      </TaskSubs>
+      {task.subtasks.length > 0 && (
+        <TaskSubs>
+          {task.subtasks.map((sub) => (
+            <li key={sub.id}>
+              {sub.name}{" "}
+              <TaskDoneButton
+                isChecked={sub.isCompleted}
+                onClick={() => toggleSubtaskCompletion(task, sub)}
+              />
+            </li>
+          ))}
+        </TaskSubs>
+      )}
+
       {!task.isCompleted && (
         <input
           type="text"
@@ -70,11 +73,6 @@ const StyledTask = styled(Task)`
   transition: var(--transition);
   position: relative;
   padding-left: 50px;
-
-  ${TaskMoveHandle} {
-    position: absolute;
-    left: 0;
-  }
 
   ${(props) =>
     !props.task.isCompleted &&
